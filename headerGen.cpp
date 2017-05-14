@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
   headerGen hg;
   const char * filepath = "./chars.txt";
   hg.loadChars(filepath);
-  hg.genHeader("HI");
+  hg.genHeader("OMGOMG");
   return 0;
 }
 
@@ -41,8 +41,7 @@ void headerGen::genHeader(const char * message) {
 
   //init rows
   for(int i = 0; i < this->height; i++) {
-    string str = "";
-    rows.push_back(str);
+    rows.push_back("");
   }
 
   
@@ -53,14 +52,30 @@ void headerGen::genHeader(const char * message) {
     //find alphabet index
     int alphabetInd = message[i] - 'A';
     for(int j = 0; j < this->height; j++) {
+      //get current last char
+      char lastChar = rows[j].back();
+
+      //last char
+      if(rows[j].length() > 0)
+        rows[j].pop_back();
+
       rows[j] = rows[j] + this->alphabet[alphabetInd][j];
+
+      if(lastChar != NULL && lastChar != ' ')
+        rows[j][rows[j].length() - this->width] = lastChar;
     }
     i++;
   }
 
+  //debug prints
   for(i = 0; i < this->height; i++) {
     cout << rows[i] << endl;
   }
+
+  //TODO write to file instead of stdout
+  //TODO implement last char in each char thing
+  //TODO set up command line args
+
   //see how long string is, warn user if > 80 characters, may not be possible with char *
 
   //keep array of last chars in each row
