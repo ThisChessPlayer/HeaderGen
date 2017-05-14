@@ -24,7 +24,8 @@ class headerGen{
     int getHeight();
     int getWidth();
     void loadChars(const char * filepath);
-    void genHeader(const char * message);
+    vector<string> genHeader(const char * message);
+    void write(const char * filepath, vector<string> header);
 
   private:
     int width;

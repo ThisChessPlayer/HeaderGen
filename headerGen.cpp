@@ -14,6 +14,7 @@
 
 using std::cout;
 using std::endl;
+using std::ofstream;
 
 /*----------------------------------------------------------------------------*
  Method Name: main
@@ -28,30 +29,34 @@ using std::endl;
  argv               argument vector
  *----------------------------------------------------------------------------*/
 int main(int argc, char * argv[]) {
+  vector<string> header;
   headerGen hg;
   const char * filepath = "./chars.txt";
   hg.loadChars(filepath);
-  hg.genHeader("OMGOMG");
+  header = hg.genHeader("HEADERGEN");
+  hg.write("README", header);
   return 0;
 }
 
-void headerGen::genHeader(const char * message) {
+vector<string> headerGen::genHeader(const char * message) {
   //have array of strings for each row
   vector<string> rows;
 
+  int i, j;
+
   //init rows
-  for(int i = 0; i < this->height; i++) {
+  for(i = 0; i < this->height; i++) {
     rows.push_back("");
   }
 
   
-  int i = 0;
+  i = 0;
 
   //for each char in message
-  while(message[i] != NULL) {
+  while(message[i] != '\0') {
     //find alphabet index
     int alphabetInd = message[i] - 'A';
-    for(int j = 0; j < this->height; j++) {
+    for(j = 0; j < this->height; j++) {
       //get current last char
       char lastChar = rows[j].back();
 
@@ -61,16 +66,27 @@ void headerGen::genHeader(const char * message) {
 
       rows[j] = rows[j] + this->alphabet[alphabetInd][j];
 
-      if(lastChar != NULL && lastChar != ' ')
+      if(lastChar != '\0' && lastChar != ' ')
         rows[j][rows[j].length() - this->width] = lastChar;
     }
     i++;
   }
 
-  //debug prints
-  for(i = 0; i < this->height; i++) {
-    cout << rows[i] << endl;
+  if(rows[0].length() < 80) {
+    int spaces = (80 - rows[0].length()) / 2;
+    for(i = 0; i < spaces; i++) {
+      for(j = 0; j < this->height; j++) {
+        rows[j] = ' ' + rows[j] + ' ';
+      }
+    }
   }
+
+  if(rows[0].length() < 80) {
+    for(i = 0; i < this->height; i++)
+      rows[i] = rows[i] + ' ';
+  }
+
+  return rows;
 
   //TODO write to file instead of stdout
   //TODO implement last char in each char thing
@@ -84,6 +100,21 @@ void headerGen::genHeader(const char * message) {
   //not space, then write a char there.
 
   //if last char, just write out last chars in each row
+}
+
+void headerGen::write(const char * filepath, vector<string> header) {
+  
+  ofstream outfile;
+  outfile.open(filepath, std::ofstream::out);
+
+  int i;
+  outfile << "--------------------------------------------------------------------------------" << endl;
+  for(i = 0; i < this->height; i++) {
+    outfile << header[i] << endl;
+  }
+  outfile << "--------------------------------------------------------------------------------" << endl;
+
+  outfile.close();
 }
 
 headerGen::headerGen() {
@@ -128,5 +159,6 @@ void headerGen::loadChars(const char * filepath) {
     getline(infile, tempStr);
   }
 
+  infile.close();
   //alphabet.push_back();
 }
