@@ -6,3 +6,51 @@
             | | | | |___| | | | |_| | |___| | | | |_| | |___| | | |             
             |_| |_|_____|_| |_|_____/_____|_| |_|_____|_____|_| |_|             
 --------------------------------------------------------------------------------
+Generates a file containing an ASCII art header using an alphabet, message,
+and output path. All of these are specifiable using command line arguments.
+--------------------------------------------------------------------------------
+Dependencies:
+  C++11
+    - iostream
+    - fstream
+    - getopt
+    - ctype
+    - string
+    - vector
+
+--------------------------------------------------------------------------------
+Building program:
+  Run make in the directory containing Makefile
+
+--------------------------------------------------------------------------------
+Running program:
+  Linux:
+    ./headerGen [-a alphabetfile] [-f outputfile] [-m message] [-h]
+
+  Windows:
+    headerGen.exe [-a alphabetfile] [-f outputfile] [-m message] [-h]
+
+  Command line args:
+  -a  Location where alphabet is stored. By default this is chars.txt
+  -f  Location to output the header. Note: this file will be overwritten!
+  -m  Message to write to file
+  -h  Display help / long usage
+
+  TODO: 
+  -c  Config default variables for alphabetfile, outputfile, message
+
+--------------------------------------------------------------------------------
+Changelog:
+  05-15-17 (v0.1)
+    headerGen
+      - Can now write to output file.
+      - Significantly increased robustness towards errors.
+
+    main
+      - Added command line arguments, has default arguments if nothing is set.
+
+  05-14-17 (v0.0)
+    headerGen
+      - Can load alphabet.
+      - Can generate headers from loaded alphabet.
+      - Can get/set size of header characters.

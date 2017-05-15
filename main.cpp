@@ -17,6 +17,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+//TODO config mode, default arguments stored in txt file
 char const * alphabetPath = "chars.txt";
 char const * filepath = "README";
 char const * message = "HEADERGEN";
