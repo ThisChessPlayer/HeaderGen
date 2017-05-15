@@ -16,7 +16,7 @@ else
 	FixPath = $1
 endif
 
-OBJS = headerGen.cpp
+OBJS = headerGen.cpp main.cpp
 
 OBJ_NAME = headerGen
 

@@ -10,77 +10,26 @@
 
 #include <fstream>
 #include <iostream>
-#include <getopt.h>
-#include <ctype.h>
 #include "headerGen.h"
 
 using std::cout;
 using std::cerr;
 using std::endl;
+
+using std::vector;
+using std::string;
+using std::ifstream;
 using std::ofstream;
 
 /*----------------------------------------------------------------------------*
- Method Name: main
+ Method Name: headerGen
  File:        headerGen.cpp
   
- Description: Drives program.
-  
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- argc               argument count
- argv               argument vector
+ Description: Instantiates headerGen object.
  *----------------------------------------------------------------------------*/
-int main(int argc, char * argv[]) {
-  vector<string> header;
-  headerGen hg;
-  char const * alphabetPath = "chars.txt";
-  char const * filepath = "README";
-  char const * message = "HEADERGEN";
-
-  int opt;
-  while((opt = getopt(argc, argv, "a:f:m:h")) != -1) {
-    switch(opt) {
-      case 'a': // alphabet location
-        alphabetPath = optarg;
-      case 'f': // filename
-        filepath = optarg;
-        break;
-      case 'm': // message
-        message = optarg;
-        break;
-      case 'h': // display long usage
-        cout << "Usage: " << argv[0] << " [-a alphabet] [-f filename] [-m message] [-h]" << endl;
-        cout << "  -a   specify alphabet location (chars.txt)" << endl;
-        cout << "  -f   file to write header to" << endl;
-        cout << "  -m   message to write in header" << endl;
-        cout << "  -h   display long usage" << endl;
-        return 0;
-        break;
-      default: /* '?' */
-        cerr << "Usage: " << argv[0] << " [-a alphabet] [-f filename] [-m message] [-h]" << endl;
-        return -1;
-    }
-  }
-
-  if(optind < argc) {
-    cerr << "Invalid options" << endl;
-    return -1;
-  }
-
-  int i = 0;
-  while(message[i]) {
-    if(!isupper(message[i])) {
-      cerr << "Invalid characters in message (Must use uppercase characters)." << endl;
-      return -1;
-    }
-    i++;
-  }
-
-  hg.loadChars(alphabetPath);
-  header = hg.genHeader(message);
-  hg.write(filepath, header);
-  return 0;
+headerGen::headerGen() {
+  this->height = 0;
+  this->width = 0;
 }
 
 /*----------------------------------------------------------------------------*
@@ -100,6 +49,19 @@ vector<string> headerGen::genHeader(const char * message) {
   vector<string> rows;
 
   int i, j;
+
+  //validity checks on alphabet
+  if(this->alphabet.size() != 26) {
+    cerr << "  Failed to load alphabet." << endl;
+  }
+
+  if(this->height == 0 || this->width == 0) {
+    cerr << "  Invalid header height or width. Likely causes:" << endl;
+    cerr << "  - Failed to load alphabet correctly" << endl;
+    cerr << "  - Alphabet file contains no or invalid height or width" << endl;
+    cerr << endl;
+    return rows;
+  }
 
   //init rows
   for(i = 0; i < this->height; i++)
@@ -150,62 +112,6 @@ vector<string> headerGen::genHeader(const char * message) {
 }
 
 /*----------------------------------------------------------------------------*
- Method Name: write
- File:        headerGen.cpp
-  
- Description: Opens file and overwrites it with header
-  
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- filepath           location to write header
- header             vector of strings to write to file
- *----------------------------------------------------------------------------*/
-void headerGen::write(const char * filepath, vector<string> header) {
-  
-  ofstream outfile;
-  outfile.open(filepath, std::ofstream::out);
-
-  int i;
-  outfile << "--------------------------------------------------------------------------------" << endl;
-  for(i = 0; i < this->height; i++) {
-    outfile << header[i] << endl;
-  }
-  outfile << "--------------------------------------------------------------------------------" << endl;
-
-  outfile.close();
-}
-
-/*----------------------------------------------------------------------------*
- Method Name: headerGen
- File:        headerGen.cpp
-  
- Description: Instantiates headerGen object.
- *----------------------------------------------------------------------------*/
-headerGen::headerGen() {
-  this->height = 0;
-  this->width = 0;
-}
-
-/*----------------------------------------------------------------------------*
- Method Name: setSize
- File:        headerGen.cpp
-  
- Description: Set size of header, affects way alphabet is read in and header is
-              printed.
-  
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- h                  height of header
- w                  width of header
- *----------------------------------------------------------------------------*/
-void headerGen::setSize(int h, int w) {
-  this->height = h;
-  this->width = w;
-}
-
-/*----------------------------------------------------------------------------*
  Method Name: getWidth
  File:        headerGen.cpp
   
@@ -236,6 +142,24 @@ int headerGen::getHeight() {
 }
 
 /*----------------------------------------------------------------------------*
+ Method Name: setSize
+ File:        headerGen.cpp
+  
+ Description: Set size of header, affects way alphabet is read in and header is
+              printed.
+  
+ Parameter Descriptions:
+ name               description
+ ------------------ -----------------------------------------------
+ h                  height of header
+ w                  width of header
+ *----------------------------------------------------------------------------*/
+void headerGen::setSize(int h, int w) {
+  this->height = h;
+  this->width = w;
+}
+
+/*----------------------------------------------------------------------------*
  Method Name: loadChars
  File:        headerGen.cpp
   
@@ -248,7 +172,7 @@ int headerGen::getHeight() {
  *----------------------------------------------------------------------------*/
 void headerGen::loadChars(const char * filepath) {
 
-  std::ifstream infile(filepath);
+  ifstream infile(filepath, std::ifstream::in);
   string tempStr;
 
   //read in width and height
@@ -271,4 +195,31 @@ void headerGen::loadChars(const char * filepath) {
   }
 
   infile.close();
+}
+
+/*----------------------------------------------------------------------------*
+ Method Name: write
+ File:        headerGen.cpp
+  
+ Description: Opens file and overwrites it with header
+  
+ Parameter Descriptions:
+ name               description
+ ------------------ -----------------------------------------------
+ filepath           location to write header
+ header             vector of strings to write to file
+ *----------------------------------------------------------------------------*/
+void headerGen::write(const char * filepath, vector<string> header) {
+  
+  ofstream outfile;
+  outfile.open(filepath, ofstream::out);
+
+  int i;
+  outfile << "--------------------------------------------------------------------------------" << endl;
+  for(i = 0; i < this->height; i++) {
+    outfile << header[i] << endl;
+  }
+  outfile << "--------------------------------------------------------------------------------" << endl;
+
+  outfile.close();
 }
