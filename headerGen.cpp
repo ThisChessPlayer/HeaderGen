@@ -10,9 +10,12 @@
 
 #include <fstream>
 #include <iostream>
+#include <getopt.h>
+#include <ctype.h>
 #include "headerGen.h"
 
 using std::cout;
+using std::cerr;
 using std::endl;
 using std::ofstream;
 
@@ -31,10 +34,52 @@ using std::ofstream;
 int main(int argc, char * argv[]) {
   vector<string> header;
   headerGen hg;
-  const char * filepath = "./chars.txt";
-  hg.loadChars(filepath);
-  header = hg.genHeader("HEADERGEN");
-  hg.write("README", header);
+  char const * alphabetPath = "chars.txt";
+  char const * filepath = "README";
+  char const * message = "HEADERGEN";
+
+  int opt;
+  while((opt = getopt(argc, argv, "a:f:m:h")) != -1) {
+    switch(opt) {
+      case 'a': // alphabet location
+        alphabetPath = optarg;
+      case 'f': // filename
+        filepath = optarg;
+        break;
+      case 'm': // message
+        message = optarg;
+        break;
+      case 'h': // display long usage
+        cout << "Usage: " << argv[0] << " [-a alphabet] [-f filename] [-m message] [-h]" << endl;
+        cout << "  -a   specify alphabet location (chars.txt)" << endl;
+        cout << "  -f   file to write header to" << endl;
+        cout << "  -m   message to write in header" << endl;
+        cout << "  -h   display long usage" << endl;
+        return 0;
+        break;
+      default: /* '?' */
+        cerr << "Usage: " << argv[0] << " [-a alphabet] [-f filename] [-m message] [-h]" << endl;
+        return -1;
+    }
+  }
+
+  if(optind < argc) {
+    cerr << "Invalid options" << endl;
+    return -1;
+  }
+
+  int i = 0;
+  while(message[i]) {
+    if(!isupper(message[i])) {
+      cerr << "Invalid characters in message (Must use uppercase characters)." << endl;
+      return -1;
+    }
+    i++;
+  }
+
+  hg.loadChars(alphabetPath);
+  header = hg.genHeader(message);
+  hg.write(filepath, header);
   return 0;
 }
 
