@@ -197,6 +197,24 @@ void headerGen::loadChars(const char * filepath) {
   infile.close();
 }
 
+
+/*----------------------------------------------------------------------------*
+ Method Name: write
+ File:        headerGen.cpp
+  
+ Description: Opens file and overwrites it with header
+  
+ Parameter Descriptions:
+ name               description
+ ------------------ -----------------------------------------------
+ filepath           location to write header
+ header             vector of strings to write to file
+*-----------------------------------------------------------------------------*/
+bool headerGen::checkEmpty(const char * filepath) {
+  ifstream infile(filepath, std::ifstream::in);
+  return infile.peek() == std::ifstream::traits_type::eof();
+}
+
 /*----------------------------------------------------------------------------*
  Method Name: write
  File:        headerGen.cpp

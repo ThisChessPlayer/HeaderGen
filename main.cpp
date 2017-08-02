@@ -132,6 +132,19 @@ int main(int argc, char * argv[]) {
     return -1;
   }
 
+  if(!hg.checkEmpty(filepath)) {
+    cout << "WARNING: File specified is not empty!" << endl;
+    cout << "Are you sure you want to overwrite " << filepath << "? [y/n] :";
+    
+    char response;
+    std::cin >> response;
+    
+    if(response == 'n') {
+      cout << "Aborting." << endl;
+      return 0;
+    }
+  }
+
   //write header to outfile
   hg.write(filepath, header);
 
