@@ -41,6 +41,13 @@ Running program:
 
 --------------------------------------------------------------------------------
 Changelog:
+  08-02-17 (v0.2)
+    headerGen
+      - Now can check whether file is empty before writing.
+
+    main
+      - Prompts user before writing to non-empty file.
+      - TODO should also add option for forcing writes
   05-15-17 (v0.1)
     headerGen
       - Can now write to output file.
