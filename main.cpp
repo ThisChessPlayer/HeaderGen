@@ -57,7 +57,7 @@ int parseArgs(int argc, char * argv[]) {
         cout << "  -f   file to write header to" << endl;
         cout << "  -m   message to write in header" << endl;
         cout << "  -h   display long usage" << endl;
-        return 0;
+        return 1;
         break;
       default: // ?
         cerr << "Usage: " << argv[0] << " [-a alphabet] [-f filename] [-m message] [-h]" << endl;
@@ -99,6 +99,9 @@ int main(int argc, char * argv[]) {
   //unsuccessful arg parsing check
   if(result == -1)
     return -1;
+  //early exit
+  else if(result == 1)
+    return 0;
 
   //check for non-uppercase characters in message
   i = 0;
