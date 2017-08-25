@@ -44,6 +44,9 @@ Changelog:
   08-24-17 (v0.3)
     main
       - Now exits on help instead of continuing.
+    headerGen
+      - Supports additional lines at end of header now, useful for sectioned
+        READMEs.
   08-02-17 (v0.2)
     headerGen
       - Now can check whether file is empty before writing.
