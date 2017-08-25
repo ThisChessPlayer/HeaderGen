@@ -21,29 +21,29 @@ using std::string;
 using std::ifstream;
 using std::ofstream;
 
-/*----------------------------------------------------------------------------*
- Method Name: headerGen
- File:        headerGen.cpp
+/*-----------------------------------------------------------------------------
+  Method Name: headerGen
+  File:        headerGen.cpp
   
- Description: Instantiates headerGen object.
- *----------------------------------------------------------------------------*/
+  Description: Instantiates headerGen object.
+-----------------------------------------------------------------------------*/
 headerGen::headerGen() {
   this->height = 0;
   this->width = 0;
 }
 
 /*----------------------------------------------------------------------------*
- Method Name: genHeader
- File:        headerGen.cpp
+  Method Name: genHeader
+  File:        headerGen.cpp
   
- Description: Creates vector of strings to represent the message given
+  Description: Creates vector of strings to represent the message given
   
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- message            message to represent using ASCII text
- <return>           vector of strings representing message
- *----------------------------------------------------------------------------*/
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  message            message to represent using ASCII text
+  <return>           vector of strings representing message
+-----------------------------------------------------------------------------*/
 vector<string> headerGen::genHeader(const char * message) {
   //vector of strings representing each row of header
   vector<string> rows;
@@ -111,65 +111,65 @@ vector<string> headerGen::genHeader(const char * message) {
   return rows;
 }
 
-/*----------------------------------------------------------------------------*
- Method Name: getWidth
- File:        headerGen.cpp
+/*-----------------------------------------------------------------------------
+  Method Name: getWidth
+  File:        headerGen.cpp
   
- Description: Returns width of header
+  Description: Returns width of header
   
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- <return>           width of header
- *----------------------------------------------------------------------------*/
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  <return>           width of header
+-----------------------------------------------------------------------------*/
 int headerGen::getWidth() {
   return this->width;
 }
 
-/*----------------------------------------------------------------------------*
- Method Name: getHeight
- File:        headerGen.cpp
+/*-----------------------------------------------------------------------------
+  Method Name: getHeight
+  File:        headerGen.cpp
   
- Description: Returns height of header
+  Description: Returns height of header
   
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- <return>           height of header
- *----------------------------------------------------------------------------*/
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  <return>           height of header
+-----------------------------------------------------------------------------*/
 int headerGen::getHeight() {
   return this->height;
 }
 
-/*----------------------------------------------------------------------------*
- Method Name: setSize
- File:        headerGen.cpp
+/*-----------------------------------------------------------------------------
+  Method Name: setSize
+  File:        headerGen.cpp
   
- Description: Set size of header, affects way alphabet is read in and header is
-              printed.
+  Description: Set size of header, affects way alphabet is read in and header is
+               printed.
   
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- h                  height of header
- w                  width of header
- *----------------------------------------------------------------------------*/
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  h                  height of header
+  w                  width of header
+-----------------------------------------------------------------------------*/
 void headerGen::setSize(int h, int w) {
   this->height = h;
   this->width = w;
 }
 
-/*----------------------------------------------------------------------------*
- Method Name: loadChars
- File:        headerGen.cpp
+/*-----------------------------------------------------------------------------
+  Method Name: loadChars
+  File:        headerGen.cpp
   
- Description: Loads alphabet into 2D vector of strings from given filepath.
+  Description: Loads alphabet into 2D vector of strings from given filepath.
   
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- filepath           path to file where alphabet is located
- *----------------------------------------------------------------------------*/
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  filepath           path to file where alphabet is located
+-----------------------------------------------------------------------------*/
 void headerGen::loadChars(const char * filepath) {
 
   ifstream infile(filepath, std::ifstream::in);
@@ -198,35 +198,35 @@ void headerGen::loadChars(const char * filepath) {
 }
 
 
-/*----------------------------------------------------------------------------*
- Method Name: write
- File:        headerGen.cpp
+/*-----------------------------------------------------------------------------
+  Method Name: write
+  File:        headerGen.cpp
   
- Description: Opens file and overwrites it with header
+  Description: Opens file and overwrites it with header
   
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- filepath           location to write header
- header             vector of strings to write to file
-*-----------------------------------------------------------------------------*/
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  filepath           location to write header
+  header             vector of strings to write to file
+-----------------------------------------------------------------------------*/
 bool headerGen::checkEmpty(const char * filepath) {
   ifstream infile(filepath, std::ifstream::in);
   return infile.peek() == std::ifstream::traits_type::eof();
 }
 
-/*----------------------------------------------------------------------------*
- Method Name: write
- File:        headerGen.cpp
+/*-----------------------------------------------------------------------------
+  Method Name: write
+  File:        headerGen.cpp
   
- Description: Opens file and overwrites it with header
+  Description: Opens file and overwrites it with header
   
- Parameter Descriptions:
- name               description
- ------------------ -----------------------------------------------
- filepath           location to write header
- header             vector of strings to write to file
- *----------------------------------------------------------------------------*/
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  filepath           location to write header
+  header             vector of strings to write to file
+-----------------------------------------------------------------------------*/
 void headerGen::write(const char * filepath, vector<string> header) {
   
   ofstream outfile;
@@ -240,4 +240,29 @@ void headerGen::write(const char * filepath, vector<string> header) {
   outfile << "--------------------------------------------------------------------------------" << endl;
 
   outfile.close();
+}
+
+/*-----------------------------------------------------------------------------
+  Routine Name: writeLines
+  File:         headerGen.cpp
+  
+  Description: Appends additional lines to end of file
+  
+  Parameter Descriptions:
+  name               description
+  ------------------ -----------------------------------------------
+  filepath           location to write header
+  lines              number of additional lines to write to file
+-----------------------------------------------------------------------------*/
+void headerGen::writeLines(const char * filepath, int lines) {
+  
+  ofstream outfile;
+  outfile.open(filepath, std::ios_base::app);
+  int i;
+
+  outfile << endl;
+
+  for (i = 0; i < lines; i++) {
+    outfile << "--------------------------------------------------------------------------------" << endl << endl;
+  }
 }

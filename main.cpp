@@ -8,9 +8,11 @@
  Description:   Drives program, does arg parsing and delegates to headerGen.
 *******************************************************************************/
 
-#include <iostream>
-#include <getopt.h>
 #include <ctype.h>
+#include <getopt.h>
+#include <iostream>
+#include <stdlib.h>
+
 #include "headerGen.h"
 
 using std::cout;
@@ -148,8 +150,16 @@ int main(int argc, char * argv[]) {
     }
   }
 
+  cout << "How many additional lines should be generated? (less than 16 digits) :";
+
+
+  char response[16];
+  std::cin >> response;
+
   //write header to outfile
   hg.write(filepath, header);
+
+  hg.writeLines(filepath, atoi(response));
 
   cout << "  Successfully wrote header to file!" << endl;
   return 0;
